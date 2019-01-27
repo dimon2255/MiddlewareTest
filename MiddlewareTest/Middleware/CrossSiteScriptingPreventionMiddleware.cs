@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MiddlewareTest.StringExtensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Threading.Tasks;
 
