@@ -2,7 +2,6 @@ using MiddlewareTest.StringExtensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Xunit;
 
 namespace MiddlewareTest.Tests
@@ -249,6 +248,38 @@ namespace MiddlewareTest.Tests
             var json = JsonConvert.SerializeObject(merchant);
 
             Assert.True(json.DetectDangerousChars());
+        }
+
+        [Fact]
+        public void Validate_Empty_String_As_Json()
+        {
+            var json = "";
+
+            Assert.False(json.IsValidJson());
+        }
+
+        [Fact]
+        public void Validate_String_As_Json()
+        {
+            var json = "YTryruakcf^&FKG&%VB";
+            
+            Assert.False(json.IsValidJson());
+        }
+
+        [Fact]
+        public void Validate_String_With_Brackets_As_Json()
+        {
+            var json = "[YTryruakcf^&FKG&%VB]";
+
+            Assert.False(json.IsValidJson());
+        }
+
+        [Fact]
+        public void Validate_String_With_Curly_Brackets_As_Json()
+        {
+            var json = "{YTryruakcf^&FKG&%VB}";
+
+            Assert.False(json.IsValidJson());
         }
 
         public class Merchant
