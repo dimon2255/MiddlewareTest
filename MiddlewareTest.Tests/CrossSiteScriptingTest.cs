@@ -1,3 +1,4 @@
+using MiddlewareTest.StringExtensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace MiddlewareTest.Tests
 
             var json = JsonConvert.SerializeObject(merchant);
 
-            Assert.False(DetectDangerousChars(json));
+            Assert.False(json.DetectDangerousChars());
         }
 
 
@@ -88,7 +89,7 @@ namespace MiddlewareTest.Tests
 
             var json = JsonConvert.SerializeObject(merchant);
 
-            Assert.True(DetectDangerousChars(json));
+            Assert.True(json.DetectDangerousChars());
         }
 
         [Fact]
@@ -128,7 +129,7 @@ namespace MiddlewareTest.Tests
 
             var json = JsonConvert.SerializeObject(merchant);
 
-            Assert.True(DetectDangerousChars(json));
+            Assert.True(json.DetectDangerousChars());
         }
 
         [Fact]
@@ -168,7 +169,7 @@ namespace MiddlewareTest.Tests
 
             var json = JsonConvert.SerializeObject(merchant);
 
-            Assert.True(DetectDangerousChars(json));
+            Assert.True(json.DetectDangerousChars());
         }
 
         [Fact]
@@ -208,7 +209,7 @@ namespace MiddlewareTest.Tests
 
             var json = JsonConvert.SerializeObject(merchant);
 
-            Assert.False(DetectDangerousChars(json));
+            Assert.False(json.DetectDangerousChars());
         }
 
         [Fact]
@@ -247,93 +248,29 @@ namespace MiddlewareTest.Tests
 
             var json = JsonConvert.SerializeObject(merchant);
 
-            Assert.True(DetectDangerousChars(json));
+            Assert.True(json.DetectDangerousChars());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="jsonString"></param>
-        private bool DetectDangerousChars(string jsonString)
+        public class Merchant
         {
-            var jsonReader = new JsonTextReader(new StringReader(jsonString));
-            var isPasswordField = false;
-
-            while (jsonReader.Read())
-            {
-                if (jsonReader.Value != null)
-                {
-                    var token = jsonReader.TokenType;
-                    var tokenValue = jsonReader.Value;
-
-                    switch (token)
-                    {
-                        case JsonToken.String:
-
-                            if (isPasswordField)
-                            {
-                                isPasswordField = false;
-                                continue;
-                            }
-
-                            var danger = ContainsDangerousChars((string)tokenValue);
-                            if (danger)
-                                return true;
-
-                            break;
-                        case JsonToken.PropertyName:
-
-                            var propName = (string)tokenValue;
-
-                            if (propName.ToLower().Equals("password"))
-                                isPasswordField = true;
-                           
-                            break;
-                    }
-                }
-            }
-
-            return false;
+            public int Id { get; set; }
+            public DateTime DateCreated { get; set; }
+            public string Value { get; set; }
+            public MposUser MposUser { get; set; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tokenValue"></param>
-        /// <returns></returns>
-        private bool ContainsDangerousChars(string tokenValue)
+        public class MposUser
         {
-            foreach (var c in _dangerousChars)
-            {
-                if (tokenValue.Contains(c))
-                {
-                    return true;
-                }
-            }
-            return false;
+            public string DivisionName { get; set; }
+            public int Id { get; set; }
+            public List<MposUserCredentials> MposUserCredentials { get; set; }
+            public string[] Values { get; set; }
         }
 
-    }
-
-    public class Merchant
-    {
-        public int Id { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string Value { get; set; }
-        public MposUser MposUser { get; set; }
-    }
-
-    public class MposUser
-    {
-        public string DivisionName { get; set; }
-        public int Id { get; set; }
-        public List<MposUserCredentials> MposUserCredentials { get; set; }
-        public string[] Values { get; set; }
-    }
-    
-    public class MposUserCredentials
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public class MposUserCredentials
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
     }
 }
