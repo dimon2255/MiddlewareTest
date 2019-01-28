@@ -11,7 +11,7 @@ namespace MiddlewareTest.Tests
         private char[] _dangerousChars = new char[] { '<', '>', '*', '%', '&', ';', ':', '\\', '?' };
 
         [Fact]
-        public void Pass_When_No_Dandgerous_Chars_In_Json()
+        public void Pass_When_No_Dangerous_Chars_In_Json()
         {
             var merchant = new Merchant()
             {
@@ -172,7 +172,7 @@ namespace MiddlewareTest.Tests
         }
 
         [Fact]
-        public void Skip_When_Dandgerous_Chars_In_Password()
+        public void Skip_When_Dangerous_Chars_In_Password()
         {
             var merchant = new Merchant()
             {

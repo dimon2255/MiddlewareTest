@@ -101,6 +101,5 @@ namespace MiddlewareTest.StringExtensions
                 return false;
             }
         }
-
     }
 }
